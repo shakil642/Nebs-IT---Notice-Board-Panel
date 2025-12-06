@@ -7,8 +7,12 @@ export default function TopHeader() {
         <header className="bg-white py-5 px-8 flex items-center justify-between border-b border-gray-100">
             {/* Left: Greeting */}
             <div>
-                <h2 className="text-xl font-bold text-gray-800">Good Afternoon Shakil</h2>
-                <p className="text-sm text-gray-500 mt-0.5">13 June, 2026</p>
+                <h2 suppressHydrationWarning className="text-xl font-bold text-gray-800">
+                    {new Date().getHours() < 12 ? 'Good Morning' : 'Good Afternoon'} Shakil
+                </h2>
+                <p suppressHydrationWarning className="text-sm text-gray-500 mt-0.5">
+                    {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </p>
             </div>
 
             {/* Right: Actions & Profile */}
