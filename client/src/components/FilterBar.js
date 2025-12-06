@@ -3,7 +3,7 @@ import { Filter, Calendar, Users } from 'lucide-react';
 
 export default function FilterBar() {
     return (
-        <div className="flex flex-col lg:flex-row items-center justify-end gap-4 py-4">
+        <div className="flex flex-col lg:flex-row items-center justify-end gap-3 py-2">
 
             <div className="text-sm font-bold text-gray-700 whitespace-nowrap mr-2">
                 Filter by:

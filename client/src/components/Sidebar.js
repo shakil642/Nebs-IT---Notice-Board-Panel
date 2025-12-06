@@ -25,10 +25,11 @@ export default function Sidebar() {
         <aside className="w-[280px] bg-white border-r border-gray-100 h-full flex flex-col hidden md:flex font-sans">
             {/* Logo Area */}
             <div className="p-8 flex items-center gap-2">
-                <div className="w-8 h-8 bg-black rounded-lg transform rotate-45 flex items-center justify-center overflow-hidden">
-                    <div className="w-4 h-4 bg-white transform -rotate-45"></div>
-                </div>
-                <span className="font-extrabold text-2xl text-gray-900 tracking-tight">Nebs-IT</span>
+                <img
+                    src="https://www.nebs-it.com/_next/static/media/logo.cd876701.png"
+                    alt="Nebs-IT Logo"
+                    className="h-8 w-auto object-contain"
+                />
             </div>
 
             {/* Navigation */}
@@ -78,6 +79,13 @@ export default function Sidebar() {
                         </div>
                         {isCareerOpen ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                     </button>
+
+                    {isCareerOpen && (
+                        <div className="pl-4 space-y-1 animate-fade-in text-gray-500">
+                            <SubMenuItem label="Job Postings" />
+                            <SubMenuItem label="Applications" />
+                        </div>
+                    )}
                 </div>
 
                 <MenuItem icon={FolderOpen} label="Document manager" />

@@ -76,34 +76,34 @@ export default function NoticeTable({ onUpdate }) {
     if (loading && notices.length === 0) return <div className="p-12 text-center text-gray-400">Loading records...</div>;
 
     return (
-        <div className="w-full min-h-[400px]">
+        <div className="w-full min-h-[300px]">
             <table className="w-full text-left border-collapse">
                 <thead>
                     <tr className="bg-white border-b border-gray-200">
-                        <th className="px-6 py-4 w-12">
+                        <th className="px-6 py-3 w-12">
                             <input type="checkbox" className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500" />
                         </th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800">Title</th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800">Notice Type</th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800">Departments/Individual</th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800">Published On</th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800">Status</th>
-                        <th className="px-6 py-4 text-sm font-bold text-gray-800 text-center">Actions</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800">Title</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800">Notice Type</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800">Departments/Individual</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800">Published On</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800">Status</th>
+                        <th className="px-6 py-3 text-sm font-bold text-gray-800 text-center">Actions</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                     {notices.map((notice) => (
                         <tr key={notice._id} className="hover:bg-gray-50 transition-colors">
-                            <td className="px-6 py-4">
+                            <td className="px-6 py-2">
                                 <input type="checkbox" className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500" />
                             </td>
-                            <td className="px-6 py-4">
-                                <p className="text-sm font-medium text-gray-700">{notice.title}</p>
+                            <td className="px-6 py-2">
+                                <p className="text-sm font-medium text-gray-700 truncate max-w-[250px]">{notice.title}</p>
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-500">
+                            <td className="px-6 py-2 text-sm text-gray-500">
                                 {notice.type}
                             </td>
-                            <td className="px-6 py-4">
+                            <td className="px-6 py-2">
                                 <span className={`text-sm font-medium ${notice.department === 'All Department' ? 'text-blue-600' :
                                         notice.department === 'Finance' ? 'text-green-600' :
                                             notice.department === 'Sales Team' ? 'text-orange-500' :
@@ -116,16 +116,16 @@ export default function NoticeTable({ onUpdate }) {
                                     {notice.department}
                                 </span>
                             </td>
-                            <td className="px-6 py-4 text-sm text-gray-500">
+                            <td className="px-6 py-2 text-sm text-gray-500">
                                 {notice.publishDate ? new Date(notice.publishDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
                             </td>
-                            <td className="px-6 py-4 relative">
+                            <td className="px-6 py-2 relative">
                                 <button
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setOpenPopoverId(openPopoverId === notice._id ? null : notice._id);
                                     }}
-                                    className={`px-4 py-1.5 rounded text-xs font-semibold cursor-pointer transition-colors ${notice.status === 'published' ? 'bg-green-100 text-green-600 hover:bg-green-200' :
+                                    className={`px-4 py-1 rounded text-xs font-semibold cursor-pointer transition-colors ${notice.status === 'published' ? 'bg-green-100 text-green-600 hover:bg-green-200' :
                                             'bg-orange-100 text-orange-600 hover:bg-orange-200'
                                         }`}
                                 >
@@ -162,7 +162,7 @@ export default function NoticeTable({ onUpdate }) {
                                     </div>
                                 )}
                             </td>
-                            <td className="px-6 py-4 text-center">
+                            <td className="px-6 py-2 text-center">
                                 <div className="flex items-center justify-center gap-3">
                                     <button className="text-gray-400 hover:text-gray-600 transition-colors">
                                         <Eye className="w-5 h-5" />
@@ -188,7 +188,7 @@ export default function NoticeTable({ onUpdate }) {
             </table>
 
             {/* Dynamic Pagination Footer - Always Visible */}
-            <div className="flex justify-center items-center py-6 gap-2 border-t border-gray-100 select-none">
+            <div className="flex justify-center items-center py-4 gap-2 border-t border-gray-100 select-none">
                 <button
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}

@@ -26,7 +26,8 @@ router.post('/', async (req, res) => {
         employeeId,
         employeeName,
         position,
-        publishDate
+        publishDate,
+        attachments // Extract attachments
     } = req.body;
 
     if (!title || !description || !type) {
@@ -43,7 +44,8 @@ router.post('/', async (req, res) => {
             employeeId,
             employeeName,
             position,
-            publishDate
+            publishDate,
+            attachments: attachments || [] // Save attachments
         });
 
         const createdNotice = await notice.save();
@@ -58,7 +60,7 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         // Simple pagination
-        const pageSize = 10;
+        const pageSize = 6;
         const page = Number(req.query.page) || 1;
 
         const count = await Notice.countDocuments({});
