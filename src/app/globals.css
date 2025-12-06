@@ -1,179 +1,104 @@
-:root {
-    --primary: #6366f1;
-    --primary-hover: #4f46e5;
-    --secondary: #ec4899;
-    --background: #0f172a;
-    --surface: #1e293b;
-    --surface-hover: #334155;
-    --text: #f8fafc;
-    --text-muted: #94a3b8;
-    --border: #334155;
-    --success: #22c55e;
-    --danger: #ef4444;
-    --radius: 0.5rem;
-    --font-sans: var(--font-geist-sans), system-ui, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+:root {
+    /* Nebs-IT Light Theme Palette */
+    --primary: #f97316;
+    /* Orange-500 */
+    --primary-hover: #ea580c;
+    /* Orange-600 */
+
+    --background: #f8fafc;
+    /* Slate-50 */
+    --surface: #ffffff;
+    /* White */
+    --surface-hover: #f1f5f9;
+    /* Slate-100 */
+
+    --text: #0f172a;
+    /* Slate-900 */
+    --text-muted: #64748b;
+    /* Slate-500 */
+
+    --border: #e2e8f0;
+    /* Slate-200 */
+
+    --success: #10b981;
+    --danger: #ef4444;
+
+    --radius: 0.5rem;
 }
 
 body {
     background-color: var(--background);
     color: var(--text);
-    font-family: var(--font-sans);
     line-height: 1.5;
-    min-height: 100vh;
 }
 
-a {
-    color: inherit;
-    text-decoration: none;
-}
+/* Custom Component Classes tailored for Light Mode */
 
-/* Utilities */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
-
-.title {
-    font-size: 2rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    background: linear-gradient(to right, var(--primary), var(--secondary));
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-}
-
+/* Buttons */
 .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 0.75rem 1.5rem;
+    padding: 0.5rem 1rem;
     border-radius: var(--radius);
-    font-weight: 600;
-    cursor: pointer;
+    font-weight: 500;
     transition: all 0.2s;
-    border: none;
-    font-size: 0.9rem;
+    cursor: pointer;
 }
 
 .btn-primary {
     background-color: var(--primary);
     color: white;
-    box-shadow: 0 4px 6px -1px rgba(99, 102, 241, 0.2);
 }
 
 .btn-primary:hover {
     background-color: var(--primary-hover);
-    transform: translateY(-1px);
 }
 
-.card {
-    background-color: var(--surface);
-    border-radius: var(--radius);
-    padding: 1.5rem;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-}
-
-.input-group {
-    margin-bottom: 1rem;
-}
-
-.label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 0.5rem;
-    color: var(--text-muted);
-}
-
+/* Form Inputs */
 .input,
 .select,
 .textarea {
+    display: block;
     width: 100%;
-    padding: 0.75rem;
-    border-radius: var(--radius);
-    background-color: var(--background);
-    border: 1px solid var(--border);
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
     color: var(--text);
-    font-size: 0.9rem;
-    transition: border-color 0.2s;
+    background-color: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    outline: none;
+    transition: border-color 0.15s;
 }
 
 .input:focus,
 .select:focus,
 .textarea:focus {
-    outline: none;
     border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
 }
 
+/* Cards */
+.card {
+    background-color: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    padding: 1.5rem;
+}
+
+/* Badges */
 .badge {
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    padding: 0.125rem 0.625rem;
     font-size: 0.75rem;
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.badge-published {
-    background-color: rgba(34, 197, 94, 0.1);
-    color: var(--success);
-}
-
-.badge-draft {
-    background-color: rgba(148, 163, 184, 0.1);
-    color: var(--text-muted);
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.animate-fade-in {
-    animation: fadeIn 0.3s ease-out forwards;
-}
-
-/* Table */
-.table-container {
-    overflow-x: auto;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.table th {
-    background-color: var(--surface-hover);
-    padding: 1rem;
-    font-weight: 600;
-    color: var(--text-muted);
-}
-
-.table td {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border);
-}
-
-.table tr:last-child td {
-    border-bottom: none;
 }
