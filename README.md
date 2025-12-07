@@ -13,6 +13,11 @@ A modern, responsive full-stack application for creating, managing, and viewing 
 - **Robust Form Validation:** Create notices with type-safety and visual validation.
 - **Dynamic Pagination:** Client-side pagination logic capable of handling large datasets.
 - **Status Management:** Toggle notices between Published, Unpublished, and Draft.
+- **Live Dashboard Stats:** Real-time counters for Active and Draft notices.
+- **Dynamic Filtering:** Filter notices by Date, Status, Department, and Search terms instantly.
+- **Smart Form Validation:** Create notices with live type-safety and visual validation.
+- **Client-Side Pagination:** Optimized pagination logic for seamless navigation.
+- **Interactive Status Toggles:** Switch notices between Published, Unpublished, and Draft directly from the UI.
 - **File Upload:** Support for image attachments (JPG/PNG).
 - **Mobile Responsive:** Fully optimized for all devices.
 
