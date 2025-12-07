@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:5000/api/notices';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api/notices';
 
 export async function fetchNotices(page = 1) {
     const res = await fetch(`${API_URL}?page=${page}`);
