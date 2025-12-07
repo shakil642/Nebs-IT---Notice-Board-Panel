@@ -66,4 +66,4 @@ A modern, responsive full-stack application for creating, managing, and viewing 
 - **Env Vars:** `NEXT_PUBLIC_API_URL` (Set to backend URL + `/api/notices`)
 
 ---
-© 2025 Nebs IT. All rights reserved.
+© 2025 Shakil Ahmed. All rights reserved.
