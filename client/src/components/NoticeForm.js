@@ -10,7 +10,7 @@ import { Calendar, CloudUpload, Paperclip, X } from 'lucide-react';
 
 // Label Helper for red asterisk
 const Label = ({ text }) => (
-    <label className="block text-sm font-semibold text-gray-700 mb-2">
+    <label className="block text-sm font-semibold text-gray-700 mb-1">
         <span className="text-red-500 mr-1">*</span>{text}
     </label>
 );
@@ -116,7 +116,7 @@ export default function NoticeForm() {
     };
 
     return (
-        <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
+        <div className="bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
             {popup && <Popup message={popup.message} type={popup.type} onClose={() => setPopup(null)} />}
 
             <SuccessModal
@@ -131,7 +131,7 @@ export default function NoticeForm() {
                 Please fill in the details below
             </h3>
 
-            <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-6">
+            <form onSubmit={(e) => handleSubmit(e, 'published')} className="space-y-4">
 
                 {/* Department Selection */}
                 <div>
@@ -149,7 +149,7 @@ export default function NoticeForm() {
                     <Label text="Notice Title" />
                     <input
                         type="text"
-                        className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        className="w-full h-10 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                         placeholder="Write the Title of Notice"
                         value={formData.title}
                         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -159,7 +159,7 @@ export default function NoticeForm() {
 
                 {/* Conditional Employee Fields */}
                 {formData.department.includes('Individual') && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in relative z-20">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 animate-fade-in relative z-20">
                         <div>
                             <MultiSelect
                                 label="Select Employee ID(s)"
@@ -173,7 +173,7 @@ export default function NoticeForm() {
                             <Label text="Employee Name" />
                             <input
                                 type="text"
-                                className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                                className="w-full h-10 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500"
                                 placeholder="Enter employee full name"
                                 value={formData.employeeName}
                                 onChange={(e) => setFormData({ ...formData, employeeName: e.target.value })}
@@ -183,7 +183,7 @@ export default function NoticeForm() {
                             <Label text="Position" />
                             <input
                                 type="text"
-                                className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                                className="w-full h-10 px-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500"
                                 placeholder="Select employee department"
                                 value={formData.position}
                                 onChange={(e) => setFormData({ ...formData, position: e.target.value })}
@@ -192,13 +192,13 @@ export default function NoticeForm() {
                     </div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Notice Type */}
                     <div>
                         <Label text="Notice Type" />
                         <div className="relative">
                             <select
-                                className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-600 appearance-none focus:outline-none focus:border-blue-500"
+                                className="w-full h-10 px-4 bg-white border border-gray-200 rounded-lg text-gray-600 appearance-none focus:outline-none focus:border-blue-500"
                                 value={formData.type}
                                 onChange={(e) => setFormData({ ...formData, type: e.target.value })}
                                 required
@@ -224,7 +224,7 @@ export default function NoticeForm() {
                         <div className="relative">
                             <input
                                 type="date"
-                                className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                                className="w-full h-10 px-4 bg-white border border-gray-200 rounded-lg text-gray-600 placeholder-gray-400 focus:outline-none focus:border-blue-500"
                                 value={formData.publishDate}
                                 onChange={(e) => setFormData({ ...formData, publishDate: e.target.value })}
                             />
@@ -237,9 +237,9 @@ export default function NoticeForm() {
 
                 {/* Body */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Notice Body</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Notice Body</label>
                     <textarea
-                        className="w-full p-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 min-h-[120px] resize-y"
+                        className="w-full p-4 bg-white border border-gray-200 rounded-lg text-gray-800 placeholder-gray-400 focus:outline-none focus:border-blue-500 min-h-[100px] resize-y"
                         placeholder="Write the details about notice"
                         value={formData.description}
                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -249,7 +249,7 @@ export default function NoticeForm() {
 
                 {/* File Upload (Dynamic) */}
                 <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Upload Attachments (optional)</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-1">Upload Attachments (optional)</label>
                     <input
                         type="file"
                         ref={fileInputRef}
@@ -260,7 +260,7 @@ export default function NoticeForm() {
 
                     {!attachment ? (
                         <div
-                            className="bg-green-50 border-2 border-dashed border-green-300 rounded-xl p-8 flex flex-col items-center justify-center cursor-pointer hover:bg-green-100 transition-colors"
+                            className="bg-green-50 border-2 border-dashed border-green-300 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-green-100 transition-colors"
                             onClick={() => fileInputRef.current?.click()}
                         >
                             <CloudUpload className="w-10 h-10 text-green-500 mb-3" />
@@ -287,11 +287,11 @@ export default function NoticeForm() {
 
                 {/* Footer Buttons */}
                 {/* Footer Buttons */}
-                <div className="flex flex-col-reverse md:flex-row justify-end items-center gap-4 pt-8 mt-8 border-t border-gray-100">
+                <div className="flex flex-col-reverse md:flex-row justify-end items-center gap-4 pt-4 mt-4 border-t border-gray-100">
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="w-full md:w-auto px-8 py-3 rounded-lg border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 transition-colors"
+                        className="w-full md:w-auto px-8 py-2.5 rounded-lg border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 transition-colors"
                     >
                         Cancel
                     </button>
@@ -299,14 +299,14 @@ export default function NoticeForm() {
                         <button
                             type="button"
                             onClick={(e) => handleSubmit(e, 'draft')}
-                            className="w-full md:w-auto px-8 py-3 rounded-lg border border-blue-100 text-blue-600 bg-blue-50 font-medium hover:bg-blue-100 transition-colors whitespace-nowrap"
+                            className="w-full md:w-auto px-8 py-2.5 rounded-lg border border-blue-100 text-blue-600 bg-blue-50 font-medium hover:bg-blue-100 transition-colors whitespace-nowrap"
                         >
                             Save as Draft
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full md:w-auto px-8 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 shadow-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
+                            className="w-full md:w-auto px-8 py-2.5 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 shadow-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                         >
                             {loading ? (
                                 <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
