@@ -6,7 +6,7 @@ import { createNotice } from '@/lib/api';
 import SuccessModal from './SuccessModal';
 import Popup from './Popup';
 import MultiSelect from './MultiSelect';
-import { Calendar, CloudUpload, Paperclip, X } from 'lucide-react';
+import { Calendar, UploadCloud, Paperclip, X } from 'lucide-react';
 
 // Label Helper for red asterisk
 const Label = ({ text }) => (
@@ -263,7 +263,7 @@ export default function NoticeForm() {
                             className="bg-green-50 border-2 border-dashed border-green-300 rounded-xl p-6 flex flex-col items-center justify-center cursor-pointer hover:bg-green-100 transition-colors"
                             onClick={() => fileInputRef.current?.click()}
                         >
-                            <CloudUpload className="w-10 h-10 text-green-500 mb-3" />
+                            <UploadCloud className="w-10 h-10 text-green-500 mb-3" />
                             <p className="text-sm font-medium text-gray-700">
                                 <span className="text-green-600 font-bold">Upload</span> nominee profile image or drag and drop.
                             </p>
