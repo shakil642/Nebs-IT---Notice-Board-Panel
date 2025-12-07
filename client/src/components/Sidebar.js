@@ -13,12 +13,13 @@ import {
     LogOut,
     ChevronDown,
     ChevronRight,
-    UserCircle
+    UserCircle,
+    X // Import X
 } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
-export default function Sidebar() {
+export default function Sidebar({ isOpen, onClose }) {
     const pathname = usePathname();
     const [isEmployeeOpen, setIsEmployeeOpen] = useState(false);
     const [isCareerOpen, setIsCareerOpen] = useState(false);
@@ -27,14 +28,26 @@ export default function Sidebar() {
     const isActive = (path) => pathname === path || (path !== '/' && pathname.startsWith(path));
 
     return (
-        <aside className="w-[280px] bg-white border-r border-gray-100 h-full flex flex-col hidden md:flex font-sans">
+        <aside className={`
+            fixed inset-y-0 left-0 z-40 w-[280px] bg-white border-r border-gray-100 h-full flex flex-col font-sans transition-transform duration-300 ease-in-out md:relative md:translate-x-0
+            ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+        `}>
             {/* Logo Area */}
-            <div className="p-8 flex items-center gap-2">
-                <img
-                    src="https://www.nebs-it.com/_next/static/media/logo.cd876701.png"
-                    alt="Nebs-IT Logo"
-                    className="h-8 w-auto object-contain"
-                />
+            <div className="p-8 flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <img
+                        src="https://www.nebs-it.com/_next/static/media/logo.cd876701.png"
+                        alt="Nebs-IT Logo"
+                        className="h-8 w-auto object-contain"
+                    />
+                </div>
+                {/* Mobile Close Button */}
+                <button
+                    onClick={onClose}
+                    className="md:hidden text-gray-500 hover:text-gray-700"
+                >
+                    <X className="w-6 h-6" />
+                </button>
             </div>
 
             {/* Navigation */}
@@ -94,7 +107,7 @@ export default function Sidebar() {
                 </div>
 
                 <MenuItem icon={FolderOpen} label="Document manager" href="/documents" isActive={isActive('/documents')} />
-                <MenuItem icon={ClipboardList} label="Notice Board" href="/" isActive={pathname === '/' || pathname === '/create'} />
+                <MenuItem icon={ClipboardList} label="Notice Board" href="/notices" isActive={pathname.startsWith('/notices') || pathname === '/create'} />
                 <MenuItem icon={Activity} label="Activity Log" href="/activity" isActive={isActive('/activity')} />
                 <MenuItem icon={LogOut} label="Exit Interview" href="/exit" isActive={isActive('/exit')} />
 

@@ -1,18 +1,28 @@
 "use client";
 
-import { Bell } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 
-export default function TopHeader() {
+export default function TopHeader({ onMenuClick }) {
     return (
-        <header className="bg-white py-5 px-8 flex items-center justify-between border-b border-gray-100">
-            {/* Left: Greeting */}
-            <div>
-                <h2 suppressHydrationWarning className="text-xl font-bold text-gray-800">
-                    {new Date().getHours() < 12 ? 'Good Morning' : 'Good Afternoon'} Shakil
-                </h2>
-                <p suppressHydrationWarning className="text-sm text-gray-500 mt-0.5">
-                    {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
-                </p>
+        <header className="bg-white py-4 px-4 md:py-5 md:px-8 flex items-center justify-between border-b border-gray-100 sticky top-0 z-20">
+            <div className="flex items-center gap-4">
+                {/* Mobile Menu Button */}
+                <button
+                    onClick={onMenuClick}
+                    className="md:hidden p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-lg"
+                >
+                    <Menu className="w-6 h-6" />
+                </button>
+
+                {/* Left: Greeting */}
+                <div>
+                    <h2 suppressHydrationWarning className="text-xl font-bold text-gray-800">
+                        {new Date().getHours() < 12 ? 'Good Morning' : 'Good Afternoon'} Shakil
+                    </h2>
+                    <p suppressHydrationWarning className="text-sm text-gray-500 mt-0.5">
+                        {new Date().toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                </div>
             </div>
 
             {/* Right: Actions & Profile */}

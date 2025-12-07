@@ -76,8 +76,8 @@ export default function NoticeTable({ onUpdate }) {
     if (loading && notices.length === 0) return <div className="p-12 text-center text-gray-400">Loading records...</div>;
 
     return (
-        <div className="w-full min-h-[300px]">
-            <table className="w-full text-left border-collapse">
+        <div className="w-full min-h-[300px] overflow-x-auto max-w-[calc(100vw-2rem)] md:max-w-full pb-4 scrollbar-hide">
+            <table className="w-full text-left border-collapse min-w-[900px]">
                 <thead>
                     <tr className="bg-white border-b border-gray-200">
                         <th className="px-6 py-3 w-12">
@@ -107,13 +107,13 @@ export default function NoticeTable({ onUpdate }) {
                                 <div className="flex flex-wrap gap-1">
                                     {(Array.isArray(notice.department) ? notice.department : [notice.department]).map((dept, index, arr) => (
                                         <span key={index} className={`text-sm font-medium ${dept === 'All Department' ? 'text-blue-600' :
-                                                dept === 'Finance' ? 'text-green-600' :
-                                                    dept === 'Sales Team' ? 'text-orange-500' :
-                                                        dept === 'Web Team' ? 'text-blue-500' :
-                                                            dept === 'Database Team' ? 'text-gray-700' :
-                                                                dept === 'Admin' ? 'text-purple-600' :
-                                                                    dept === 'Individual' ? 'text-blue-400' :
-                                                                        'text-red-500'
+                                            dept === 'Finance' ? 'text-green-600' :
+                                                dept === 'Sales Team' ? 'text-orange-500' :
+                                                    dept === 'Web Team' ? 'text-blue-500' :
+                                                        dept === 'Database Team' ? 'text-gray-700' :
+                                                            dept === 'Admin' ? 'text-purple-600' :
+                                                                dept === 'Individual' ? 'text-blue-400' :
+                                                                    'text-red-500'
                                             }`}>
                                             {dept}{index < arr.length - 1 ? ', ' : ''}
                                         </span>

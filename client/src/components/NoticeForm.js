@@ -286,26 +286,27 @@ export default function NoticeForm() {
                 </div>
 
                 {/* Footer Buttons */}
-                <div className="flex flex-col md:flex-row justify-end items-center gap-4 pt-8 mt-8 border-t border-gray-100">
+                {/* Footer Buttons */}
+                <div className="flex flex-col-reverse md:flex-row justify-end items-center gap-4 pt-8 mt-8 border-t border-gray-100">
                     <button
                         type="button"
                         onClick={() => router.back()}
-                        className="w-full md:w-auto px-8 py-3 rounded-full border border-gray-300 text-gray-600 font-medium hover:bg-gray-50 transition-colors"
+                        className="w-full md:w-auto px-8 py-3 rounded-lg border border-gray-200 text-gray-600 font-medium hover:bg-gray-50 transition-colors"
                     >
                         Cancel
                     </button>
-                    <div className="flex gap-4 w-full md:w-auto">
+                    <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
                         <button
                             type="button"
                             onClick={(e) => handleSubmit(e, 'draft')}
-                            className="flex-1 md:flex-none px-8 py-3 rounded-full border border-blue-500 text-blue-600 font-medium hover:bg-blue-50 transition-colors"
+                            className="w-full md:w-auto px-8 py-3 rounded-lg border border-blue-100 text-blue-600 bg-blue-50 font-medium hover:bg-blue-100 transition-colors whitespace-nowrap"
                         >
                             Save as Draft
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
-                            className="flex-1 md:flex-none px-8 py-3 rounded-full bg-orange-500 text-white font-medium hover:bg-orange-600 shadow-md transition-colors flex items-center justify-center gap-2"
+                            className="w-full md:w-auto px-8 py-3 rounded-lg bg-orange-500 text-white font-medium hover:bg-orange-600 shadow-sm transition-colors flex items-center justify-center gap-2 whitespace-nowrap"
                         >
                             {loading ? (
                                 <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
