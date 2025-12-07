@@ -1,88 +1,66 @@
-# Notice Dashboard
+# Nebs-IT Notice Board Panel
 
-A full-stack MERN application for managing notices. This project includes a standardized Notice creation form and a listing dashboard with status management.
+A modern, responsive Notice Board application built for Nebs IT to manage employee communications effectively.
 
-## Tech Stack
+## 🚀 Live Demo
+- **Frontend (Client):** [https://nebs-it-client.onrender.com](https://nebs-it-client.onrender.com)
+- **Backend (Server):** [https://nebs-it-server.onrender.com](https://nebs-it-server.onrender.com)
 
-- **Frontend**: Next.js (App Router), Vanilla CSS (Custom Design System)
-- **Backend**: Node.js, Express.js, MongoDB (Mongoose)
-- **Database**: MongoDB
+## ✨ Features
+- **Dashboard Overview:** Visualize active and draft notices with real-time stats.
+- **Create Notices:** Rich text support with various notice types (Warning, Appreciation, etc.).
+- **Notice Board:** Dedicated view for employees to check latest updates.
+- **Mobile Responsive:** Fully optimized for all devices with a custom burger menu and touch-friendly controls.
+- **Cloud Database:** Data is securely stored in MongoDB Atlas.
+- **File Upload:** Support for image attachments.
 
-## Prerequisites
+## 🛠️ Technology Stack
+- **Frontend:** Next.js, Tailwind CSS, Lucide React
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB Atlas (Mongoose)
 
-- Node.js (v18+)
-- MongoDB (Local or Atlas Connection String)
+## 📥 Setup Instructions (Local)
 
-## Installation & Setup
+1.  **Clone the repository**
+    ```bash
+    git clone https://github.com/shakil642/Nebs-IT---Notice-Board-Panel.git
+    cd Nebs-IT---Notice-Board-Panel
+    ```
 
-1. **Clone the repository** (if applicable)
+2.  **Backend Setup**
+    ```bash
+    cd server
+    npm install
+    # Create a .env file with:
+    # MONGO_URI=your_mongodb_connection_string
+    # PORT=5000
+    npm run dev
+    ```
 
-### Backend Setup
+3.  **Frontend Setup**
+    ```bash
+    cd client
+    npm install
+    # Create a .env.local file with:
+    # NEXT_PUBLIC_API_URL=http://localhost:5000/api/notices
+    npm run dev
+    ```
 
-1. Navigate to the `server` directory:
-   ```bash
-   cd server
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Create a `.env` file in `server` root:
-   ```env
-   PORT=5000
-   MONGO_URI=your_mongodb_connection_string
-   ```
-4. Start the server:
-   ```bash
-   npm run dev
-   ```
-   Server runs on `http://localhost:5000`.
+4.  **Visit App:** Open [http://localhost:3000](http://localhost:3000)
 
-### Frontend Setup
+## 📦 Deployment (Render)
 
-1. Navigate to the `client` directory:
-   ```bash
-   cd client
-   ```
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Start the development server:
-   ```bash
-   npm run dev
-   ```
-   Client runs on `http://localhost:3000`.
+### Backend
+- **Root Directory:** `server`
+- **Build Command:** `npm install`
+- **Start Command:** `node index.js`
+- **Env Vars:** `MONGO_URI`, `PORT`
 
-## API Documentation
+### Frontend
+- **Root Directory:** `client`
+- **Build Command:** `npm install && npm run build`
+- **Start Command:** `npm start`
+- **Env Vars:** `NEXT_PUBLIC_API_URL` (Set to backend URL + `/api/notices`)
 
-### Base URL
-`http://localhost:5000/api`
-
-### Endpoints
-
-- **GET /notices**
-  - Fetch all notices.
-  - Query Params: `page` (number).
-
-- **POST /notices**
-  - Create a new notice.
-  - Body: `{ title, description, type, status? }`
-
-- **PATCH /notices/:id**
-  - Update notice status.
-  - Body: `{ status: 'published' | 'draft' }`
-
-## Deployment
-
-### Frontend (Vercel)
-- Push `client` directory to GitHub.
-- Import into Vercel.
-- No special config needed for Next.js.
-
-### Backend (Render/Railway)
-- Push `server` directory to GitHub.
-- Create a Web Service.
-- Set Build Command: `npm install`
-- Set Start Command: `node index.js`
-- Add `MONGO_URI` in Environment Variables.
+---
+© 2025 Nebs IT. All rights reserved.
