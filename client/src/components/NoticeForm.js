@@ -3,7 +3,9 @@
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { createNotice } from '@/lib/api';
+import SuccessModal from './SuccessModal';
 import Popup from './Popup';
+import MultiSelect from './MultiSelect';
 import { Calendar, CloudUpload, Paperclip, X } from 'lucide-react';
 
 // Label Helper for red asterisk
@@ -20,18 +22,43 @@ export default function NoticeForm() {
         title: '',
         description: '',
         type: '',
-        department: '',
-        employeeId: '',
+        department: [], // Array for multi-select
+        employeeId: [], // Array for multi-select
         employeeName: '',
         position: '',
         publishDate: ''
     });
     const [loading, setLoading] = useState(false);
     const [popup, setPopup] = useState(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [attachment, setAttachment] = useState(null);
+
+    const departmentOptions = [
+        { value: 'Individual', label: 'Individual' },
+        { value: 'All Department', label: 'All Department' },
+        { value: 'Finance', label: 'Finance' },
+        { value: 'HR', label: 'HR' },
+        { value: 'Sales Team', label: 'Sales Team' },
+        { value: 'IT', label: 'IT' },
+        { value: 'Admin', label: 'Admin' },
+        { value: 'Web Team', label: 'Web Team' },
+        { value: 'Database Team', label: 'Database Team' },
+    ];
+
+    const employeeOptions = [
+        { value: 'EMP-001', label: 'EMP-001 (Shakil)' },
+        { value: 'EMP-002', label: 'EMP-002 (Asif)' },
+        { value: 'EMP-003', label: 'EMP-003 (Nabil)' },
+    ];
 
     const handleSubmit = async (e, status = 'published') => {
         e.preventDefault();
+
+        if (formData.department.length === 0) {
+            setPopup({ message: 'Please select at least one department or individual.', type: 'error' });
+            return;
+        }
+
         setLoading(true);
 
         try {
@@ -42,16 +69,39 @@ export default function NoticeForm() {
             };
 
             await createNotice(noticeData);
-            setPopup({ message: `Notice ${status === 'draft' ? 'Saved as Draft' : 'Published'} Successfully!`, type: 'success' });
 
-            setTimeout(() => {
-                router.push('/');
-            }, 1500);
+            if (status === 'published') {
+                setShowSuccessModal(true);
+            } else {
+                setPopup({ message: 'Notice Saved as Draft Successfully!', type: 'success' });
+                setTimeout(() => router.push('/'), 1500);
+            }
 
         } catch (error) {
             setPopup({ message: 'Failed to save notice.', type: 'error' });
+        } finally {
             setLoading(false);
         }
+    };
+
+    const handleCreateAnother = () => {
+        setFormData({
+            title: '',
+            description: '',
+            type: '',
+            department: [],
+            employeeId: [],
+            employeeName: '',
+            position: '',
+            publishDate: ''
+        });
+        setAttachment(null);
+        setShowSuccessModal(false);
+        setPopup(null);
+    };
+
+    const handleCloseOrView = () => {
+        router.push('/');
     };
 
     const handleFileSelect = (e) => {
@@ -69,6 +119,14 @@ export default function NoticeForm() {
         <div className="bg-white rounded-xl border border-gray-200 p-8 shadow-sm">
             {popup && <Popup message={popup.message} type={popup.type} onClose={() => setPopup(null)} />}
 
+            <SuccessModal
+                isOpen={showSuccessModal}
+                noticeTitle={formData.title}
+                onClose={handleCloseOrView}
+                onViewNotice={handleCloseOrView}
+                onCreateAnother={handleCreateAnother}
+            />
+
             <h3 className="text-lg font-bold text-gray-800 mb-6 pb-4 border-b border-gray-100">
                 Please fill in the details below
             </h3>
@@ -77,29 +135,13 @@ export default function NoticeForm() {
 
                 {/* Department Selection */}
                 <div>
-                    <Label text="Target Department(s) or Individual" />
-                    <div className="relative">
-                        <select
-                            className="w-full h-12 px-4 bg-gray-50 border border-gray-200 rounded-lg text-gray-600 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 appearance-none"
-                            value={formData.department}
-                            onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                            required
-                        >
-                            <option value="" disabled>Select Department</option>
-                            <option value="Individual">Individual</option>
-                            <option value="All Department">All Department</option>
-                            <option value="Finance">Finance</option>
-                            <option value="HR">HR</option>
-                            <option value="Sales Team">Sales Team</option>
-                            <option value="IT">IT</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Web Team">Web Team</option>
-                            <option value="Database Team">Database Team</option>
-                        </select>
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                        </div>
-                    </div>
+                    <MultiSelect
+                        label="Target Department(s) or Individual"
+                        options={departmentOptions}
+                        value={formData.department}
+                        onChange={(val) => setFormData({ ...formData, department: val })}
+                        placeholder="Select Departments..."
+                    />
                 </div>
 
                 {/* Title */}
@@ -116,25 +158,16 @@ export default function NoticeForm() {
                 </div>
 
                 {/* Conditional Employee Fields */}
-                {formData.department === 'Individual' && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+                {formData.department.includes('Individual') && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in relative z-20">
                         <div>
-                            <Label text="Select Employee ID" />
-                            <div className="relative">
-                                <select
-                                    className="w-full h-12 px-4 bg-white border border-gray-200 rounded-lg text-gray-600 appearance-none focus:outline-none focus:border-blue-500"
-                                    value={formData.employeeId}
-                                    onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
-                                >
-                                    <option value="" disabled>Select employee</option>
-                                    <option value="EMP-001">EMP-001 (Shakil)</option>
-                                    <option value="EMP-002">EMP-002 (Asif)</option>
-                                    <option value="EMP-003">EMP-003 (Nabil)</option>
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400">
-                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
-                                </div>
-                            </div>
+                            <MultiSelect
+                                label="Select Employee ID(s)"
+                                options={employeeOptions}
+                                value={formData.employeeId}
+                                onChange={(val) => setFormData({ ...formData, employeeId: val })}
+                                placeholder="Select Employees..."
+                            />
                         </div>
                         <div>
                             <Label text="Employee Name" />

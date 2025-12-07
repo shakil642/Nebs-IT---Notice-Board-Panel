@@ -15,11 +15,16 @@ import {
     ChevronRight,
     UserCircle
 } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 export default function Sidebar() {
+    const pathname = usePathname();
     const [isEmployeeOpen, setIsEmployeeOpen] = useState(false);
     const [isCareerOpen, setIsCareerOpen] = useState(false);
+
+    // Helper to check if a link is active
+    const isActive = (path) => pathname === path || (path !== '/' && pathname.startsWith(path));
 
     return (
         <aside className="w-[280px] bg-white border-r border-gray-100 h-full flex flex-col hidden md:flex font-sans">
@@ -35,7 +40,7 @@ export default function Sidebar() {
             {/* Navigation */}
             <nav className="flex-1 px-4 space-y-1 overflow-y-auto scrollbar-hide py-4">
 
-                <MenuItem icon={LayoutDashboard} label="Dashboard" />
+                <MenuItem icon={LayoutDashboard} label="Dashboard" href="/" isActive={pathname === '/'} />
 
                 {/* Employee Dropdown */}
                 <div className="space-y-1">
@@ -53,7 +58,7 @@ export default function Sidebar() {
 
                     {isEmployeeOpen && (
                         <div className="pl-4 space-y-1 animate-fade-in text-gray-500">
-                            <SubMenuItem label="Employee Database" active />
+                            <SubMenuItem label="Employee Database" />
                             <SubMenuItem label="Add New Employee" />
                             <SubMenuItem label="Performance Report" />
                             <SubMenuItem label="Performance History" />
@@ -61,10 +66,10 @@ export default function Sidebar() {
                     )}
                 </div>
 
-                <MenuItem icon={CreditCard} label="Payroll" />
-                <MenuItem icon={Receipt} label="Pay Slip" />
-                <MenuItem icon={CalendarCheck} label="Attendance" />
-                <MenuItem icon={FileInput} label="Request Center" />
+                <MenuItem icon={CreditCard} label="Payroll" href="/payroll" isActive={isActive('/payroll')} />
+                <MenuItem icon={Receipt} label="Pay Slip" href="/payslip" isActive={isActive('/payslip')} />
+                <MenuItem icon={CalendarCheck} label="Attendance" href="/attendance" isActive={isActive('/attendance')} />
+                <MenuItem icon={FileInput} label="Request Center" href="/request" isActive={isActive('/request')} />
 
                 {/* Career Dropdown */}
                 <div className="space-y-1">
@@ -88,13 +93,13 @@ export default function Sidebar() {
                     )}
                 </div>
 
-                <MenuItem icon={FolderOpen} label="Document manager" />
-                <MenuItem icon={ClipboardList} label="Notice Board" />
-                <MenuItem icon={Activity} label="Activity Log" />
-                <MenuItem icon={LogOut} label="Exit Interview" />
+                <MenuItem icon={FolderOpen} label="Document manager" href="/documents" isActive={isActive('/documents')} />
+                <MenuItem icon={ClipboardList} label="Notice Board" href="/" isActive={pathname === '/' || pathname === '/create'} />
+                <MenuItem icon={Activity} label="Activity Log" href="/activity" isActive={isActive('/activity')} />
+                <MenuItem icon={LogOut} label="Exit Interview" href="/exit" isActive={isActive('/exit')} />
 
                 <div className="pt-4 mt-4 border-t border-gray-100">
-                    <MenuItem icon={UserCircle} label="Profile" />
+                    <MenuItem icon={UserCircle} label="Profile" href="/profile" isActive={isActive('/profile')} />
                 </div>
 
             </nav>
@@ -102,11 +107,11 @@ export default function Sidebar() {
     );
 }
 
-function MenuItem({ icon: Icon, label, active = false }) {
+function MenuItem({ icon: Icon, label, href = '#', isActive = false }) {
     return (
-        <a href="#" className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-colors group ${active ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
+        <a href={href} className={`flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-xl transition-colors group ${isActive ? 'bg-orange-50 text-orange-600' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
             }`}>
-            <Icon className={`w-5 h-5 ${active ? 'text-orange-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
+            <Icon className={`w-5 h-5 ${isActive ? 'text-orange-600' : 'text-gray-400 group-hover:text-gray-600'}`} />
             <span>{label}</span>
         </a>
     );

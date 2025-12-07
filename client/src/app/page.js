@@ -65,7 +65,7 @@ export default function Home() {
 
             {/* Notice Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <NoticeTable onUpdate={refreshStats} key={updateTrigger} />
+                <NoticeTable onUpdate={refreshStats} />
             </div>
 
         </div>

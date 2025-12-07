@@ -104,17 +104,21 @@ export default function NoticeTable({ onUpdate }) {
                                 {notice.type}
                             </td>
                             <td className="px-6 py-2">
-                                <span className={`text-sm font-medium ${notice.department === 'All Department' ? 'text-blue-600' :
-                                        notice.department === 'Finance' ? 'text-green-600' :
-                                            notice.department === 'Sales Team' ? 'text-orange-500' :
-                                                notice.department === 'Web Team' ? 'text-blue-500' :
-                                                    notice.department === 'Database Team' ? 'text-gray-700' :
-                                                        notice.department === 'Admin' ? 'text-purple-600' :
-                                                            notice.department === 'Individual' ? 'text-blue-400' :
-                                                                'text-red-500'
-                                    }`}>
-                                    {notice.department}
-                                </span>
+                                <div className="flex flex-wrap gap-1">
+                                    {(Array.isArray(notice.department) ? notice.department : [notice.department]).map((dept, index, arr) => (
+                                        <span key={index} className={`text-sm font-medium ${dept === 'All Department' ? 'text-blue-600' :
+                                                dept === 'Finance' ? 'text-green-600' :
+                                                    dept === 'Sales Team' ? 'text-orange-500' :
+                                                        dept === 'Web Team' ? 'text-blue-500' :
+                                                            dept === 'Database Team' ? 'text-gray-700' :
+                                                                dept === 'Admin' ? 'text-purple-600' :
+                                                                    dept === 'Individual' ? 'text-blue-400' :
+                                                                        'text-red-500'
+                                            }`}>
+                                            {dept}{index < arr.length - 1 ? ', ' : ''}
+                                        </span>
+                                    ))}
+                                </div>
                             </td>
                             <td className="px-6 py-2 text-sm text-gray-500">
                                 {notice.publishDate ? new Date(notice.publishDate).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : '-'}
@@ -126,7 +130,7 @@ export default function NoticeTable({ onUpdate }) {
                                         setOpenPopoverId(openPopoverId === notice._id ? null : notice._id);
                                     }}
                                     className={`px-4 py-1 rounded text-xs font-semibold cursor-pointer transition-colors ${notice.status === 'published' ? 'bg-green-100 text-green-600 hover:bg-green-200' :
-                                            'bg-orange-100 text-orange-600 hover:bg-orange-200'
+                                        'bg-orange-100 text-orange-600 hover:bg-orange-200'
                                         }`}
                                 >
                                     {notice.status === 'published' ? 'Published' : 'Draft'}
@@ -202,8 +206,8 @@ export default function NoticeTable({ onUpdate }) {
                         key={pageNum}
                         onClick={() => handlePageChange(pageNum)}
                         className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${page === pageNum
-                                ? 'bg-blue-50 text-blue-600 border border-blue-200'
-                                : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
+                            ? 'bg-blue-50 text-blue-600 border border-blue-200'
+                            : 'text-gray-500 hover:bg-gray-50 hover:text-gray-700'
                             }`}
                     >
                         {pageNum}

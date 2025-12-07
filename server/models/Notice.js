@@ -24,12 +24,11 @@ const noticeSchema = mongoose.Schema({
         ],
     },
     department: {
-        type: String,
-        default: 'All Department',
-        enum: ['All Department', 'Finance', 'Sales Team', 'HR', 'IT', 'Admin', 'Individual', 'Web Team', 'Database Team'],
+        type: [String], // Array of Strings
+        default: ['All Department'],
     },
     // New fields for Individual notices
-    employeeId: { type: String },
+    employeeId: { type: [String] },
     employeeName: { type: String },
     position: { type: String },
 
