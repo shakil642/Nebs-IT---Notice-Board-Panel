@@ -60,16 +60,52 @@ router.post('/', async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         // Simple pagination
-        const pageSize = 6;
+        const pageSize = Number(req.query.limit) || 6;
         const page = Number(req.query.page) || 1;
 
-        const count = await Notice.countDocuments({});
-        const notices = await Notice.find({})
+        // Build Query
+        const query = {};
+        console.log('Incoming Filter Request Params:', req.query); // Debug Log
+
+        // Search (Title or Employee)
+        if (req.query.search) {
+            query.$or = [
+                { title: { $regex: req.query.search, $options: 'i' } },
+                { employeeName: { $regex: req.query.search, $options: 'i' } },
+                { employeeId: { $regex: req.query.search, $options: 'i' } }
+            ];
+        }
+
+        // Filter by Department
+        if (req.query.department && req.query.department.trim() !== 'Departments or individuals') {
+            query.department = req.query.department.trim();
+        }
+
+        // Filter by Status
+        if (req.query.status && req.query.status !== 'Status') {
+            query.status = req.query.status.toLowerCase();
+        }
+
+        // Filter by Date
+        if (req.query.date) {
+            const date = new Date(req.query.date);
+            const nextDay = new Date(date);
+            nextDay.setDate(date.getDate() + 1);
+
+            query.publishDate = {
+                $gte: date,
+                $lt: nextDay
+            };
+        }
+
+        const count = await Notice.countDocuments(query);
+        console.log('Final MongoDB Query:', JSON.stringify(query, null, 2)); // Debug Query
+        const notices = await Notice.find(query)
             .sort({ createdAt: -1 }) // Newest first
             .limit(pageSize)
             .skip(pageSize * (page - 1));
 
-        res.json({ notices, page, pages: Math.ceil(count / pageSize) });
+        res.json({ notices, page, pages: Math.ceil(count / pageSize), debugQuery: query });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

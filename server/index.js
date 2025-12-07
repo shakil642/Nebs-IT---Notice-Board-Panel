@@ -20,3 +20,4 @@ app.use('/api/notices', require('./routes/noticeRoutes'));
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Forced Restart for Debugging

@@ -1,23 +1,26 @@
 # Nebs-IT Notice Board Panel
+[Verified Submission for Code Test]
 
-A modern, responsive Notice Board application built for Nebs IT to manage employee communications effectively.
+A modern, responsive full-stack application for creating, managing, and viewing organizational notices. This dashboard features a complete CRUD workflow, status management (Publised, Draft, Unpublished), and advanced filtering capabilities.
 
 ## 🚀 Live Demo
 - **Frontend (Client):** [https://nebs-it-client.onrender.com](https://nebs-it-client.onrender.com)
 - **Backend (Server):** [https://nebs-it-server.onrender.com](https://nebs-it-server.onrender.com)
+- **API Base URL:** `https://nebs-it-server.onrender.com/api/notices`
 
 ## ✨ Features
-- **Dashboard Overview:** Visualize active and draft notices with real-time stats.
-- **Create Notices:** Rich text support with various notice types (Warning, Appreciation, etc.).
-- **Notice Board:** Dedicated view for employees to check latest updates.
-- **Mobile Responsive:** Fully optimized for all devices with a custom burger menu and touch-friendly controls.
-- **Cloud Database:** Data is securely stored in MongoDB Atlas.
-- **File Upload:** Support for image attachments.
+- **Smart Filtering:** Filter notices by Date, Status, Department, and Search terms.
+- **Robust Form Validation:** Create notices with type-safety and visual validation.
+- **Dynamic Pagination:** Client-side pagination logic capable of handling large datasets.
+- **Status Management:** Toggle notices between Published, Unpublished, and Draft.
+- **File Upload:** Support for image attachments (JPG/PNG).
+- **Mobile Responsive:** Fully optimized for all devices.
 
 ## 🛠️ Technology Stack
-- **Frontend:** Next.js, Tailwind CSS, Lucide React
-- **Backend:** Node.js, Express.js
-- **Database:** MongoDB Atlas (Mongoose)
+- **Frontend:** Next.js (App Router), React, Tailwind CSS, Lucide React icons.
+- **Backend:** Node.js, Express.js REST API.
+- **Database:** MongoDB Atlas (Mongoose ODM).
+- **Deployment:** Render (Automatic CI/CD).
 
 ## 📥 Setup Instructions (Local)
 

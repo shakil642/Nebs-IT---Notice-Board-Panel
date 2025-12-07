@@ -11,6 +11,13 @@ export default function NoticesPage() {
     const [stats, setStats] = useState({ active: 0, draft: 0 });
     const [updateTrigger, setUpdateTrigger] = useState(0);
 
+    const [filters, setFilters] = useState({
+        search: '',
+        department: 'Departments or individuals',
+        status: 'Status',
+        date: ''
+    });
+
     // Fetch stats on load and when updateTrigger changes
     useEffect(() => {
         const getStats = async () => {
@@ -27,6 +34,15 @@ export default function NoticesPage() {
     // Function to trigger a refresh of stats
     const refreshStats = () => {
         setUpdateTrigger(prev => prev + 1);
+    };
+
+    const handleResetFilters = () => {
+        setFilters({
+            search: '',
+            department: 'Departments or individuals',
+            status: 'Status',
+            date: ''
+        });
     };
 
     return (
@@ -61,11 +77,15 @@ export default function NoticesPage() {
             </div>
 
             {/* Filter Bar */}
-            <FilterBar />
+            <FilterBar
+                filters={filters}
+                onFilterChange={setFilters}
+                onReset={handleResetFilters}
+            />
 
             {/* Notice Table */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-                <NoticeTable onUpdate={refreshStats} key={updateTrigger} />
+                <NoticeTable filters={filters} onUpdate={refreshStats} key={updateTrigger} />
             </div>
 
         </div>

@@ -4,19 +4,21 @@ import { useEffect, useState, useRef } from 'react';
 import { fetchNotices, updateNoticeStatus } from '@/lib/api';
 import { Eye, Edit, MoreVertical, X, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export default function NoticeTable({ onUpdate }) {
+export default function NoticeTable({ filters, onUpdate }) {
     const [notices, setNotices] = useState([]);
     const [loading, setLoading] = useState(true);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const ITEMS_PER_PAGE = 6;
 
     // State to track which row's status popover is open
     const [openPopoverId, setOpenPopoverId] = useState(null);
     const popoverRef = useRef(null);
 
+    // Refetch when filters change (ignoring page for fetch, handling page locally)
     useEffect(() => {
-        loadNotices(page);
-    }, [page]);
+        loadNotices();
+    }, [filters]);
 
     useEffect(() => {
         function handleClickOutside(event) {
@@ -30,12 +32,32 @@ export default function NoticeTable({ onUpdate }) {
         };
     }, []);
 
-    const loadNotices = async (currentPage) => {
+    // Load notices (FETCH ALL for client-side pagination)
+    const loadNotices = async () => {
         setLoading(true);
+        console.log("Loading notices for client-side processing:", filters);
         try {
-            const data = await fetchNotices(currentPage);
-            setNotices(data.notices || []);
-            setTotalPages(data.pages || 1);
+            // First fetch to get metadata and first batch
+            const firstPageData = await fetchNotices(1, filters);
+            let allNotices = firstPageData.notices || [];
+
+            // If server indicates more pages (because it ignored our limit=1000 param), fetch them
+            const totalServerPages = firstPageData.pages || 1;
+            if (totalServerPages > 1) {
+                const promises = [];
+                for (let i = 2; i <= totalServerPages; i++) {
+                    promises.push(fetchNotices(i, filters));
+                }
+                const remainingPagesData = await Promise.all(promises);
+                remainingPagesData.forEach(data => {
+                    if (data.notices) {
+                        allNotices = [...allNotices, ...data.notices];
+                    }
+                });
+            }
+
+            setNotices(allNotices);
+            // Total pages will be calculated locally from filteredNotices
         } catch (error) {
             console.error(error);
         } finally {
@@ -43,8 +65,69 @@ export default function NoticeTable({ onUpdate }) {
         }
     };
 
-    const handleToggleStatus = async (id, currentStatus) => {
-        const newStatus = currentStatus === 'published' ? 'draft' : 'published';
+    // Client-side filtering logic
+    const filteredNotices = notices.filter(notice => {
+        // Department Filter
+        if (filters.department && filters.department !== 'Departments or individuals' && filters.department !== 'All Department') {
+            const depts = Array.isArray(notice.department) ? notice.department : [notice.department];
+            if (!depts.includes(filters.department)) return false;
+        }
+        if (filters.department === 'All Department') {
+            const depts = Array.isArray(notice.department) ? notice.department : [notice.department];
+            if (!depts.includes('All Department')) return false;
+        }
+
+        // Status Filter
+        if (filters.status && filters.status !== 'Status' && filters.status.toLowerCase() !== notice.status) {
+            return false;
+        }
+
+        // Search Filter
+        if (filters.search) {
+            const searchLower = filters.search.toLowerCase();
+            const matchesTitle = notice.title?.toLowerCase().includes(searchLower);
+            const matchesEmpName = notice.employeeName?.toLowerCase().includes(searchLower);
+            const matchesEmpId = Array.isArray(notice.employeeId)
+                ? notice.employeeId.some(id => id.toLowerCase().includes(searchLower))
+                : notice.employeeId?.toLowerCase().includes(searchLower);
+
+            if (!matchesTitle && !matchesEmpName && !matchesEmpId) return false;
+        }
+
+        // Date Filter
+        if (filters.date) {
+            const noticeDate = new Date(notice.publishDate).toDateString();
+            const filterDate = new Date(filters.date).toDateString();
+            if (noticeDate !== filterDate) return false;
+        }
+
+        return true;
+    });
+
+    // Calculate total pages based on FILTERED results
+    useEffect(() => {
+        const calculatedPages = Math.ceil(filteredNotices.length / ITEMS_PER_PAGE) || 1;
+        setTotalPages(calculatedPages);
+
+        // If current page is beyond total pages (e.g. filtered down), reset to 1
+        if (page > calculatedPages) {
+            setPage(1);
+        }
+    }, [filteredNotices.length]); // Removed 'page' dependency to avoid loop
+
+    // Get current page data
+    const paginatedNotices = filteredNotices.slice(
+        (page - 1) * ITEMS_PER_PAGE,
+        page * ITEMS_PER_PAGE
+    );
+
+    const handleToggleStatus = async (id, targetStatus) => {
+        let newStatus = targetStatus;
+
+        // Optimization: if already that status, ignore
+        const currentNotice = notices.find(n => n._id === id);
+        if (currentNotice && currentNotice.status === newStatus) return;
+
         try {
             // Optimistic update
             setNotices(prev => prev.map(n => n._id === id ? { ...n, status: newStatus } : n));
@@ -52,11 +135,12 @@ export default function NoticeTable({ onUpdate }) {
             if (onUpdate) onUpdate();
         } catch (error) {
             console.error('Failed to update status', error);
-            loadNotices(page); // Revert
+            loadNotices(); // Revert
         }
     };
 
     const handlePageChange = (newPage) => {
+        console.log('Changing to page:', newPage);
         if (newPage >= 1 && newPage <= totalPages) {
             setPage(newPage);
         }
@@ -65,7 +149,6 @@ export default function NoticeTable({ onUpdate }) {
     // Helper to generate page numbers
     const getPageNumbers = () => {
         const pages = [];
-        // Always show at least page 1
         const maxPage = Math.max(totalPages, 1);
         for (let i = 1; i <= maxPage; i++) {
             pages.push(i);
@@ -92,7 +175,7 @@ export default function NoticeTable({ onUpdate }) {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                    {notices.map((notice) => (
+                    {paginatedNotices.map((notice) => (
                         <tr key={notice._id} className="hover:bg-gray-50 transition-colors">
                             <td className="px-6 py-2">
                                 <input type="checkbox" className="w-4 h-4 text-orange-500 border-gray-300 rounded focus:ring-orange-500" />
@@ -130,17 +213,19 @@ export default function NoticeTable({ onUpdate }) {
                                         setOpenPopoverId(openPopoverId === notice._id ? null : notice._id);
                                     }}
                                     className={`px-4 py-1 rounded text-xs font-semibold cursor-pointer transition-colors ${notice.status === 'published' ? 'bg-green-100 text-green-600 hover:bg-green-200' :
-                                        'bg-orange-100 text-orange-600 hover:bg-orange-200'
+                                        notice.status === 'unpublished' ? 'bg-gray-100 text-gray-600 hover:bg-gray-200' :
+                                            'bg-orange-100 text-orange-600 hover:bg-orange-200'
                                         }`}
                                 >
-                                    {notice.status === 'published' ? 'Published' : 'Draft'}
+                                    {notice.status === 'published' ? 'Published' :
+                                        notice.status === 'unpublished' ? 'Unpublished' : 'Draft'}
                                 </button>
 
                                 {/* Toggle Popover */}
                                 {openPopoverId === notice._id && (
                                     <div
                                         ref={popoverRef}
-                                        className="absolute left-0 top-full mt-2 z-50 bg-white shadow-xl rounded-lg border border-gray-100 p-3 min-w-[180px] animate-fade-in"
+                                        className="absolute left-0 top-full mt-2 z-50 bg-white shadow-xl rounded-lg border border-gray-100 p-3 min-w-[200px] animate-fade-in"
                                         onClick={(e) => e.stopPropagation()}
                                     >
                                         <div className="flex items-center justify-between mb-2 pb-2 border-b border-gray-50">
@@ -156,7 +241,7 @@ export default function NoticeTable({ onUpdate }) {
                                             </span>
 
                                             <button
-                                                onClick={() => handleToggleStatus(notice._id, notice.status)}
+                                                onClick={() => handleToggleStatus(notice._id, notice.status === 'published' ? 'unpublished' : 'published')}
                                                 className={`w-10 h-5 rounded-full p-0.5 flex items-center transition-colors duration-300 ${notice.status === 'published' ? 'bg-green-500 justify-end' : 'bg-gray-300 justify-start'
                                                     }`}
                                             >
@@ -181,7 +266,7 @@ export default function NoticeTable({ onUpdate }) {
                             </td>
                         </tr>
                     ))}
-                    {notices.length === 0 && !loading && (
+                    {filteredNotices.length === 0 && !loading && (
                         <tr>
                             <td colSpan="7" className="px-6 py-12 text-center text-gray-400">
                                 No notices found.
@@ -194,6 +279,7 @@ export default function NoticeTable({ onUpdate }) {
             {/* Dynamic Pagination Footer - Always Visible */}
             <div className="flex justify-center items-center py-4 gap-2 border-t border-gray-100 select-none">
                 <button
+                    type="button"
                     onClick={() => handlePageChange(page - 1)}
                     disabled={page === 1}
                     className={`p-2 rounded-lg transition-colors ${page === 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
@@ -203,6 +289,7 @@ export default function NoticeTable({ onUpdate }) {
 
                 {getPageNumbers().map(pageNum => (
                     <button
+                        type="button"
                         key={pageNum}
                         onClick={() => handlePageChange(pageNum)}
                         className={`w-8 h-8 flex items-center justify-center rounded-lg text-sm font-medium transition-colors ${page === pageNum
@@ -215,8 +302,9 @@ export default function NoticeTable({ onUpdate }) {
                 ))}
 
                 <button
+                    type="button"
                     onClick={() => handlePageChange(page + 1)}
-                    disabled={page === totalPages && totalPages > 0}
+                    disabled={page === totalPages}
                     className={`p-2 rounded-lg transition-colors ${page >= totalPages ? 'text-gray-300 cursor-not-allowed' : 'text-gray-500 hover:bg-gray-100 hover:text-gray-700'}`}
                 >
                     <ChevronRight className="w-5 h-5" />
