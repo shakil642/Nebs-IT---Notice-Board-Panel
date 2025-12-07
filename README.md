@@ -1,7 +1,7 @@
 # Nebs-IT Notice Board Panel
 [Verified Submission for Code Test]
 
-A modern, responsive full-stack application for creating, managing, and viewing organizational notices. This dashboard features a complete CRUD workflow, status management (Publised, Draft, Unpublished), and advanced filtering capabilities.
+A modern, responsive full-stack application for creating, managing, and viewing organisational notices. This dashboard features a complete CRUD workflow, status management (Published, Draft, Unpublished), and advanced filtering capabilities.
 
 ## 🚀 Live Demo
 - **Frontend (Client):** [https://nebs-it-client.onrender.com](https://nebs-it-client.onrender.com)
@@ -9,10 +9,6 @@ A modern, responsive full-stack application for creating, managing, and viewing 
 - **API Base URL:** `https://nebs-it-server.onrender.com/api/notices`
 
 ## ✨ Features
-- **Smart Filtering:** Filter notices by Date, Status, Department, and Search terms.
-- **Robust Form Validation:** Create notices with type-safety and visual validation.
-- **Dynamic Pagination:** Client-side pagination logic capable of handling large datasets.
-- **Status Management:** Toggle notices between Published, Unpublished, and Draft.
 - **Live Dashboard Stats:** Real-time counters for Active and Draft notices.
 - **Dynamic Filtering:** Filter notices by Date, Status, Department, and Search terms instantly.
 - **Smart Form Validation:** Create notices with live type-safety and visual validation.
@@ -40,7 +36,7 @@ A modern, responsive full-stack application for creating, managing, and viewing 
     cd server
     npm install
     # Create a .env file with:
-    # MONGO_URI=your_mongodb_connection_string
+    # MONGO_URI = mongodb_connection_string
     # PORT=5000
     npm run dev
     ```
