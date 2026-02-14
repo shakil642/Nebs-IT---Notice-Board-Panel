@@ -1,5 +1,4 @@
 # Nebs-IT Notice Board Panel
-[Verified Submission for Code Test]
 
 A modern, responsive full-stack application for creating, managing, and viewing organisational notices. This dashboard features a complete CRUD workflow, status management (Published, Draft, Unpublished), and advanced filtering capabilities.
 
